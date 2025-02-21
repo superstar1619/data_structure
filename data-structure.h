@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 void unix_error(char *msg);
+void runtime_error(char *msg);
 
 void *Malloc(size_t size);
 void *Realloc(void *ptr, size_t size);
@@ -12,7 +13,7 @@ void Free(void *ptr);
 #define ElementType int
 #endif
 
-#ifndef _List_H
+#ifdef _List_H
 
 struct Node;
 typedef struct Node *PtrToNode;
@@ -41,5 +42,43 @@ struct Node
     ElementType Element;
     Position Next;
 };
+
+#endif
+
+#ifdef _Cursor_H
+
+#define SpaceSize 1024
+
+typedef int PtrToNode;
+typedef PtrToNode List;
+typedef PtrToNode Position;
+
+void InitializeCursorSpace(void);
+
+Position CursorAlloc(void);
+static void CursorFree(Position P);
+
+void DeleteNode(Position P);
+Position NewNode(ElementType X, Position PNext);
+
+List MakeEmpty(List L);
+int IsEmpty(const List L);
+int IsLast(const Position P, const List L);
+Position Find(ElementType X, const List L);
+void Delete(ElementType X, List L);
+Position FindPrevious(ElementType X, const List L);
+void Insert(ElementType X, List L, Position P);
+void DeleteList(List L);
+Position Header(const List L);
+Position First(const List L);
+Position Advance(const Position P);
+ElementType Retrieve(const Position P);
+struct Node
+{
+    ElementType Element;
+    Position Next;
+};
+
+struct Node CursorSpace[SpaceSize];
 
 #endif

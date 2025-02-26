@@ -290,7 +290,7 @@ ElementType Retrieve(const Position P)
 
 #endif
 
-#ifdef __Stack_h
+#ifdef _Stack_h
 
 PtrToNode NewNode(ElementType X, PtrToNode PNext)
 {
@@ -356,6 +356,78 @@ void Pop(Stack S)
         runtime_error("Empty Stack");
     S->Next = TmpCell->Next;
     DeleteNode(TmpCell);
+}
+
+#endif
+
+#ifndef _Stack_H
+
+int IsEmpty(Stack S)
+{
+    return S->TopOfStack == EmptyTOS;
+}
+
+int IsFull(Stack S)
+{
+    return S->TopOfStack >= S->Capacity - 1;
+}
+
+Stack CreateStack(int MaxElements)
+{
+    Stack S;
+    if (MaxElements < MinStackSize)
+        runtime_error("Stack size if too small");
+    S = Malloc(sizeof(struct StackRecord));
+    S->Array = (ElementType *)Malloc(sizeof(ElementType) * MaxElements);
+    S->Capacity = MaxElements;
+    MakeEmpty(S);
+    return S;
+}
+
+void DisposetStack(Stack S)
+{
+    if (S != NULL)
+    {
+        free(S->Array);
+        free(S);
+    }
+}
+
+void MakeEmpty(Stack S)
+{
+    S->TopOfStack = EmptyTOS;
+}
+
+void Push(ElementType X, Stack S)
+{
+    if (IsFull(X))
+        runtime_error("Full Stack");
+    else
+        S->Array[++S->TopOfStack] = X;
+}
+
+ElementType Top(Stack S)
+{
+    if (!IsEmpty(S))
+        return S->Array[S->TopOfStack];
+    runtime_error("Empty Stack");
+    return 0;
+}
+
+void Pop(Stack S)
+{
+    if (IsEmpty(S))
+        runtime_error("Empty Stack");
+    else
+        S->TopOfStack--;
+}
+
+ElementType TopAndPop(Stack S)
+{
+    if (!IsEmpty(S))
+        return S->Array[S->TopOfStack];
+    runtime_error("Empty Stack");
+    return 0;
 }
 
 #endif

@@ -289,3 +289,73 @@ ElementType Retrieve(const Position P)
 }
 
 #endif
+
+#ifdef __Stack_h
+
+PtrToNode NewNode(ElementType X, PtrToNode PNext)
+{
+    PtrToNode P = (PtrToNode)Malloc(sizeof(struct Node));
+    P->Element = X;
+    P->Next = PNext;
+    return P;
+}
+
+void DeleteNode(PtrToNode P)
+{
+    Free(P);
+}
+
+int IsEmpty(Stack S)
+{
+    return S->Next == NULL;
+}
+
+Stack CreateStack(void)
+{
+    Stack S;
+    S = NewNode(0, NULL);
+    MakeEmpty(S);
+    return S;
+}
+
+void DisposeStack(Stack S)
+{
+    MakeEmpty(S);
+    DeleteNode(S);
+}
+
+void MakeEmpty(Stack S)
+{
+    if (S == NULL)
+        runtime_error("Must use CreateStack first");
+    else
+        while (!IsEmpty(S))
+            Pop(S);
+}
+
+void Push(ElementType X, Stack S)
+{
+    PtrToNode TmpCell;
+    TmpCell = NewNode(X, S->Next);
+    S->Next = TmpCell;
+    return;
+}
+
+ElementType Top(Stack S)
+{
+    if (!IsEmpty(S))
+        return S->Next->Element;
+    runtime_error("Empty Stack");
+    return 0;
+}
+
+void Pop(Stack S)
+{
+    PtrToNode TmpCell = S->Next;
+    if (TmpCell == NULL)
+        runtime_error("Empty Stack");
+    S->Next = TmpCell->Next;
+    DeleteNode(TmpCell);
+}
+
+#endif

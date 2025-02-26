@@ -82,3 +82,28 @@ struct Node
 struct Node CursorSpace[SpaceSize];
 
 #endif
+
+#ifdef __Stack_h
+
+struct Node;
+typedef struct Node *PtrToNode;
+typedef PtrToNode Stack;
+
+PtrToNode NewNode(ElementType X, PtrToNode PNext);
+void DeleteNode(PtrToNode P);
+
+int IsEmpty(Stack S);
+Stack CreateStack(void);
+void DisposeStack(Stack S);
+void MakeEmpty(Stack S);
+void Push(ElementType X, Stack S);
+ElementType Top(Stack S);
+void Pop(Stack S);
+
+struct Node
+{
+    ElementType Element;
+    PtrToNode Next;
+};
+
+#endif

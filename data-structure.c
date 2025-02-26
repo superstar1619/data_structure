@@ -400,7 +400,7 @@ void MakeEmpty(Stack S)
 
 void Push(ElementType X, Stack S)
 {
-    if (IsFull(X))
+    if (IsFull(S))
         runtime_error("Full Stack");
     else
         S->Array[++S->TopOfStack] = X;

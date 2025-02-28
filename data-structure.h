@@ -135,7 +135,7 @@ struct StackRecord
 
 #endif
 
-#ifndef _Queue_h
+#ifdef _Queue_h
 
 struct QueueRecord;
 typedef struct QueueRecord *Queue;
@@ -154,6 +154,40 @@ ElementType FrontAndDequeue(Queue Q);
 #define MinQueueSize (5)
 
 struct QueueRecord
+{
+    int Capacity;
+    int Front;
+    int Rear;
+    int Size;
+    ElementType *Array;
+};
+
+#endif
+
+#ifndef _Deque_h
+
+struct DequeRecord;
+typedef struct DequeRecord *Deque;
+
+int IsEmpty(Deque D);
+int IsFull(Deque D);
+Deque CreateDeque(int MaxElements);
+void DisposeDeque(Deque D);
+void MakeEmpty(Deque D);
+int Succ(int Value, Deque D);
+int Prev(int Value, Deque D);
+void Push(ElementType X, Deque D);
+void Pop(Deque D);
+void Inject(ElementType X, Deque D);
+void Eject(Deque D);
+ElementType Front(Deque D);
+ElementType Rear(Deque D);
+ElementType FrontAndPop(Deque D);
+ElementType RearAndEject(Deque D);
+
+#define MinDequeSize (5)
+
+struct DequeRecord
 {
     int Capacity;
     int Front;

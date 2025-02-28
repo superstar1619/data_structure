@@ -432,7 +432,7 @@ ElementType TopAndPop(Stack S)
 
 #endif
 
-#ifndef _Queue_h
+#ifdef _Queue_h
 
 int IsEmpty(Queue Q)
 {
@@ -460,8 +460,8 @@ void DisposeQueue(Queue Q)
 {
     if (Q != NULL)
     {
-        free(Q->Array);
-        free(Q);
+        Free(Q->Array);
+        Free(Q);
     }
 }
 
@@ -514,6 +514,142 @@ ElementType FrontAndDequeue(Queue Q)
 {
     ElementType X = Front(Q);
     Dequeue(Q);
+    return X;
+}
+
+#endif
+
+#ifndef _Deque_h
+
+int IsEmpty(Deque D)
+{
+    return D->Size == 0;
+}
+
+int IsFull(Deque D)
+{
+    return D->Size == D->Capacity;
+}
+
+Deque CreateDeque(int MaxElemnts)
+{
+    Deque D;
+    if (MaxElemnts < MinDequeSize)
+        runtime_error("Deque size if too small");
+    D = (Deque)Malloc(sizeof(struct DequeRecord));
+    D->Array = (ElementType *)Malloc(sizeof(ElementType) * MaxElemnts);
+    D->Capacity = MaxElemnts;
+    MakeEmpty(D);
+    return D;
+}
+
+void DisposeDeque(Deque D)
+{
+    if (D != NULL)
+    {
+        Free(D->Array);
+        Free(D);
+    }
+}
+
+void MakeEmpty(Deque D)
+{
+    D->Size = 0;
+    D->Front = 0;
+    D->Rear = -1;
+}
+
+int Succ(int Value, Deque D)
+{
+    if (++Value == D->Capacity)
+        Value = 0;
+    return Value;
+}
+
+int Prev(int Value, Deque D)
+{
+    if (--Value == -1)
+        Value = D->Capacity - 1;
+    return Value;
+}
+
+void Push(ElementType X, Deque D)
+{
+    if (IsFull(D))
+        runtime_error("Full deque");
+    else if (IsEmpty(D))
+        Inject(X, D);
+    else
+    {
+        D->Size++;
+        D->Front = Prev(D->Front, D);
+        D->Array[D->Front] = X;
+    }
+}
+
+void Pop(Deque D)
+{
+    if (IsEmpty(D))
+        runtime_error("Empty deque");
+    else
+    {
+        D->Size--;
+        D->Front = Succ(D->Front, D);
+    }
+}
+
+void Inject(ElementType X, Deque D)
+{
+    if (IsFull(D))
+        runtime_error("Full deque");
+    else
+    {
+        D->Size++;
+        D->Rear = Succ(D->Rear, D);
+        D->Array[D->Rear] = X;
+    }
+}
+
+void Eject(Deque D)
+{
+    if (IsEmpty(D))
+        runtime_error("Empty deque");
+    else
+    {
+        D->Size--;
+        D->Rear = Prev(D->Rear, D);
+    }
+}
+
+ElementType Front(Deque D)
+{
+    if (IsEmpty(D))
+        runtime_error("Empty deque");
+    return D->Array[D->Front];
+}
+
+ElementType Rear(Deque D)
+{
+    if (IsEmpty(D))
+        runtime_error("Empty deque");
+    return D->Array[D->Rear];
+}
+
+ElementType FrontAndPop(Deque D)
+{
+    if (IsEmpty(D))
+        runtime_error("Empty deque");
+    ElementType X = Front(X);
+    Pop(D);
+    return X;
+}
+
+ElementType RearAndEject(Deque D)
+{
+    if (IsEmpty(D))
+        runtime_error("Empty deque");
+    ElementType X = Rear(X);
+    Eject(D);
     return X;
 }
 

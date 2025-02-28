@@ -225,6 +225,7 @@ Position FindMin(SearchTree T);
 Position FindMax(SearchTree T);
 SearchTree Insert(ElementType X, SearchTree T);
 SearchTree Delete(ElementType X, SearchTree T);
+void DeleteSpecialTree(SearchTree T, LinkLine L);
 ElementType Retrieve(Position P);
 Position FindPrev(ElementType X, SearchTree T);
 Position FindNext(ElementType X, SearchTree T);

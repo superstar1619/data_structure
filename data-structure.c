@@ -894,6 +894,7 @@ void Insert(ElementType X, LinkLine LT)
         ModifyLine(T, L);
     }
 }
+
 void DeleteSpecialTree(SearchTree T, LinkLine L)
 {
     if (T->Left != NULL)
@@ -902,6 +903,7 @@ void DeleteSpecialTree(SearchTree T, LinkLine L)
         ModifyLine(T->Right, L);
     DeleteNode(T);
 }
+
 void Delete(ElementType X, LinkLine LT)
 {
     SearchTree T = *LT;

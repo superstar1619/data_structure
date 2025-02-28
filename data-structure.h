@@ -210,7 +210,7 @@ struct TreeNode
 
 #endif
 
-#ifndef _Tree_H
+#ifdef _Tree_H
 
 struct TreeNode;
 typedef struct TreeNode *Position;
@@ -225,6 +225,35 @@ Position FindMin(SearchTree T);
 Position FindMax(SearchTree T);
 SearchTree Insert(ElementType X, SearchTree T);
 SearchTree Delete(ElementType X, SearchTree T);
+ElementType Retrieve(Position P);
+Position FindPrev(ElementType X, SearchTree T);
+Position FindNext(ElementType X, SearchTree T);
+
+struct TreeNode
+{
+    ElementType Element;
+    SearchTree Left;
+    SearchTree Right;
+};
+
+#endif
+
+#ifndef _Tree_H_NR
+
+struct TreeNode;
+typedef struct TreeNode *Position;
+typedef struct TreeNode *SearchTree;
+typedef struct TreeNode **LinkLine;
+
+SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right);
+void DeleteNode(SearchTree T);
+void ModifyLine(Position P, LinkLine L);
+SearchTree MakeEmpty(SearchTree T);
+Position Find(ElementType X, SearchTree T);
+Position FindMin(SearchTree T);
+Position FindMax(SearchTree T);
+void Insert(ElementType X, LinkLine LT);
+void Delete(ElementType X, LinkLine LT);
 ElementType Retrieve(Position P);
 Position FindPrev(ElementType X, SearchTree T);
 Position FindNext(ElementType X, SearchTree T);

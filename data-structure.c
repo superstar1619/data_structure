@@ -655,7 +655,7 @@ ElementType RearAndEject(Deque D)
 
 #endif
 
-#ifndef _Tree_H
+#ifdef _Tree_H
 
 SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right)
 {
@@ -703,14 +703,6 @@ Position FindMin(SearchTree T)
     else
         return FindMin(T->Left);
 }
-
-// Position FindMax(SearchTree T)
-// {
-//     if (T != NULL)
-//         while (T->Right != NULL)
-//             T = T->Right;
-//     return T;
-// }
 
 Position FindMax(SearchTree T)
 {
@@ -808,6 +800,191 @@ Position FindNext(ElementType X, SearchTree T)
     {
         if (P == NULL || P->Element > T->Element)
             P = T;
+    }
+    return P;
+}
+
+#endif
+
+#ifndef _Tree_H_NR
+
+SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right)
+{
+    SearchTree T = (SearchTree)Malloc(sizeof(struct TreeNode));
+    T->Element = X;
+    T->Left = Left;
+    T->Right = Right;
+    return T;
+}
+
+void DeleteNode(SearchTree T)
+{
+    Free(T);
+}
+
+void ModifyLine(Position P, LinkLine L)
+{
+    if (L != NULL)
+        *L = P;
+}
+
+SearchTree MakeEmpty(SearchTree T)
+{
+    if (T != NULL)
+    {
+        MakeEmpty(T->Left);
+        MakeEmpty(T->Right);
+        DeleteNode(T);
+    }
+    return NULL;
+}
+
+Position Find(ElementType X, SearchTree T)
+{
+    while (T != NULL)
+    {
+        if (T->Element > X)
+            T = T->Left;
+        else if (T->Element < X)
+            T = T->Right;
+        else
+            break;
+    }
+    return T;
+}
+
+Position FindMin(SearchTree T)
+{
+    if (T != NULL)
+        while (T->Left != NULL)
+            T = T->Left;
+    return T;
+}
+
+Position FindMax(SearchTree T)
+{
+    if (T != NULL)
+        while (T->Right != NULL)
+            T = T->Right;
+    return T;
+}
+
+void Insert(ElementType X, LinkLine LT)
+{
+    LinkLine L = LT;
+    SearchTree T = *LT;
+    while (T != NULL)
+    {
+        if (T->Element > X)
+        {
+            L = &(T->Left);
+            T = T->Left;
+        }
+        else if (T->Element < X)
+        {
+            L = &(T->Right);
+            T = T->Right;
+        }
+        else
+            break;
+    }
+    if (T == NULL)
+    {
+        T = NewNode(X, NULL, NULL);
+        ModifyLine(T, L);
+    }
+}
+void DeleteSpecialTree(SearchTree T, LinkLine L)
+{
+    if (T->Left != NULL)
+        ModifyLine(T->Left, L);
+    else
+        ModifyLine(T->Right, L);
+    DeleteNode(T);
+}
+void Delete(ElementType X, LinkLine LT)
+{
+    SearchTree T = *LT;
+    LinkLine L = LT;
+    while (T != NULL)
+    {
+        if (T->Element < X)
+        {
+            L = &(T->Right);
+            T = T->Right;
+        }
+        else if (T->Element > X)
+        {
+            L = &(T->Left);
+            T = T->Left;
+        }
+        else
+            break;
+    }
+    if (T == NULL)
+        runtime_error("Element not found");
+    else
+    {
+        if (T->Left && T->Right)
+        {
+            SearchTree TP = T->Right;
+            LinkLine LP = &(T->Right);
+            while (TP->Left != NULL)
+            {
+                LP = &(TP->Left);
+                TP = TP->Left;
+            }
+            T->Element = TP->Element;
+            DeleteSpecialTree(TP, LP);
+        }
+        else
+            DeleteSpecialTree(T, L);
+    }
+}
+
+ElementType Retrieve(Position P)
+{
+    return P->Element;
+}
+
+Position FindPrev(ElementType X, SearchTree T)
+{
+    if (T == NULL)
+        runtime_error("Empty Tree");
+    Position P = NULL, N;
+    while (T != NULL)
+    {
+        if (T->Element < X)
+        {
+            if (P == NULL || P->Element < T->Element)
+                P = T;
+            T = T->Right;
+        }
+        else if (T->Element > X)
+            T = T->Left;
+        else
+            T = T->Left;
+    }
+    return P;
+}
+
+Position FindNext(ElementType X, SearchTree T)
+{
+    if (T == NULL)
+        runtime_error("Empty Tree");
+    Position P = NULL, N;
+    while (T != NULL)
+    {
+        if (T->Element < X)
+            T = T->Right;
+        else if (T->Element > X)
+        {
+            if (P == NULL || P->Element > T->Element)
+                P = T;
+            T = T->Left;
+        }
+        else
+            T = T->Right;
     }
     return P;
 }

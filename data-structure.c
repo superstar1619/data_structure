@@ -519,7 +519,7 @@ ElementType FrontAndDequeue(Queue Q)
 
 #endif
 
-#ifndef _Deque_h
+#ifdef _Deque_h
 
 int IsEmpty(Deque D)
 {

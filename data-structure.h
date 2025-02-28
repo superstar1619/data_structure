@@ -164,7 +164,7 @@ struct QueueRecord
 
 #endif
 
-#ifndef _Deque_h
+#ifdef _Deque_h
 
 struct DequeRecord;
 typedef struct DequeRecord *Deque;
@@ -194,6 +194,18 @@ struct DequeRecord
     int Rear;
     int Size;
     ElementType *Array;
+};
+
+#endif
+
+#ifdef _Tree_h
+
+typedef struct TreeNode *PtrToNode;
+struct TreeNode
+{
+    ElementType Element;
+    PtrToNode FirstChild;
+    PtrToNode NextSibing;
 };
 
 #endif

@@ -360,7 +360,7 @@ void Pop(Stack S)
 
 #endif
 
-#ifndef _Stack_H
+#ifdef _Stack_H
 
 int IsEmpty(Stack S)
 {
@@ -425,9 +425,96 @@ void Pop(Stack S)
 ElementType TopAndPop(Stack S)
 {
     if (!IsEmpty(S))
-        return S->Array[S->TopOfStack];
+        return S->Array[S->TopOfStack--];
     runtime_error("Empty Stack");
     return 0;
+}
+
+#endif
+
+#ifndef _Queue_h
+
+int IsEmpty(Queue Q)
+{
+    return Q->Capacity == 0;
+}
+
+int IsFull(Queue Q)
+{
+    return Q->Capacity == Q->Size;
+}
+
+Queue CreateQueue(int MaxElements)
+{
+    Queue Q;
+    if (MaxElements < MinQueueSize)
+        runtime_error("Queue size if too small");
+    Q = (Queue)Malloc(sizeof(struct QueueRecord));
+    Q->Array = (ElementType *)Malloc(sizeof(ElementType) * MaxElements);
+    Q->Capacity = MaxElements;
+    MakeEmpty(Q);
+    return Q;
+}
+
+void DisposeQueue(Queue Q)
+{
+    if (Q != NULL)
+    {
+        free(Q->Array);
+        free(Q);
+    }
+}
+
+void MakeEmpty(Queue Q)
+{
+    Q->Front = 0;
+    Q->Rear = -1;
+    Q->Size = 0;
+    return;
+}
+
+static int Succ(int Value, Queue Q)
+{
+    if (++Value == Q->Capacity)
+        Value = 0;
+    return Value;
+}
+
+void Enqueue(ElementType X, Queue Q)
+{
+    if (IsFull(Q))
+        runtime_error("Full queue");
+    else
+    {
+        Q->Size++;
+        Q->Rear = Succ(Q->Rear, Q);
+        Q->Array[Q->Rear] = X;
+    }
+}
+
+ElementType Front(Queue Q)
+{
+    if (IsEmpty(Q))
+        runtime_error("Empty queue");
+    return Q->Array[Q->Front];
+}
+
+void Dequeue(Queue Q)
+{
+    if (IsEmpty(Q))
+        runtime_error("Empty queue");
+    else
+    {
+        Q->Size--;
+        Q->Front = Succ(Q->Front, Q);
+    }
+}
+
+ElementType FrontAndDequeue(Queue Q)
+{
+    ElementType X = Front(Q);
+    Dequeue(Q);
+    return X;
 }
 
 #endif

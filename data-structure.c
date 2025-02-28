@@ -766,4 +766,50 @@ ElementType Retrieve(Position P)
     return P->Element;
 }
 
+Position FindPrev(ElementType X, SearchTree T)
+{
+    if (T == NULL)
+        runtime_error("Empty Tree");
+    Position P = NULL, N;
+    if (T->Element == X)
+        N = T->Left;
+    else if (T->Element < X)
+        N = T->Right;
+    else
+        N = T->Left;
+    if (N != NULL)
+    {
+        P = FindPrev(X, N);
+    }
+    if (T->Element < X)
+    {
+        if (P == NULL || P->Element < T->Element)
+            P = T;
+    }
+    return P;
+}
+
+Position FindNext(ElementType X, SearchTree T)
+{
+    if (T == NULL)
+        runtime_error("Empty Tree");
+    Position P = NULL, N;
+    if (T->Element == X)
+        N = T->Right;
+    else if (T->Element < X)
+        N = T->Right;
+    else
+        N = T->Left;
+    if (N != NULL)
+    {
+        P = FindNext(X, N);
+    }
+    if (T->Element > X)
+    {
+        if (P == NULL || P->Element > T->Element)
+            P = T;
+    }
+    return P;
+}
+
 #endif

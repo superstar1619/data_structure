@@ -22,8 +22,8 @@ typedef struct Node *PtrToNode;
 typedef PtrToNode List;
 typedef PtrToNode Position;
 
-void DeleteNode(Position P);
-Position NewNode(ElementType X, Position PNext);
+static void DeleteNode(Position P);
+static Position NewNode(ElementType X, Position PNext);
 
 List Init();
 List MakeEmpty(List L);
@@ -57,11 +57,11 @@ typedef PtrToNode Position;
 
 void InitializeCursorSpace(void);
 
-Position CursorAlloc(void);
+static Position CursorAlloc(void);
 static void CursorFree(Position P);
 
-void DeleteNode(Position P);
-Position NewNode(ElementType X, Position PNext);
+static void DeleteNode(Position P);
+static Position NewNode(ElementType X, Position PNext);
 
 List MakeEmpty(List L);
 int IsEmpty(const List L);
@@ -91,8 +91,8 @@ struct Node;
 typedef struct Node *PtrToNode;
 typedef PtrToNode Stack;
 
-PtrToNode NewNode(ElementType X, PtrToNode PNext);
-void DeleteNode(PtrToNode P);
+static PtrToNode NewNode(ElementType X, PtrToNode PNext);
+static void DeleteNode(PtrToNode P);
 
 int IsEmpty(Stack S);
 Stack CreateStack(void);
@@ -176,8 +176,8 @@ int IsFull(Deque D);
 Deque CreateDeque(int MaxElements);
 void DisposeDeque(Deque D);
 void MakeEmpty(Deque D);
-int Succ(int Value, Deque D);
-int Prev(int Value, Deque D);
+static int Succ(int Value, Deque D);
+static int Prev(int Value, Deque D);
 void Push(ElementType X, Deque D);
 void Pop(Deque D);
 void Inject(ElementType X, Deque D);
@@ -218,8 +218,8 @@ struct TreeNode;
 typedef struct TreeNode *Position;
 typedef struct TreeNode *SearchTree;
 
-SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right);
-void DeleteNode(SearchTree T);
+static SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right);
+static void DeleteNode(SearchTree T);
 
 SearchTree MakeEmpty(SearchTree T);
 Position Find(ElementType X, SearchTree T);
@@ -247,15 +247,15 @@ typedef struct TreeNode *Position;
 typedef struct TreeNode *SearchTree;
 typedef struct TreeNode **LinkLine;
 
-SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right);
-void DeleteNode(SearchTree T);
-void ModifyLine(Position P, LinkLine L);
+static SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right);
+static void DeleteNode(SearchTree T);
+static void ModifyLine(Position P, LinkLine L);
 SearchTree MakeEmpty(SearchTree T);
 Position Find(ElementType X, SearchTree T);
 Position FindMin(SearchTree T);
 Position FindMax(SearchTree T);
 void Insert(ElementType X, LinkLine LT);
-void DeleteSpecialTree(SearchTree T, LinkLine L);
+static void DeleteSpecialTree(SearchTree T, LinkLine L);
 void Delete(ElementType X, LinkLine LT);
 ElementType Retrieve(Position P);
 Position FindPrev(ElementType X, SearchTree T);
@@ -276,18 +276,18 @@ struct AvlNode;
 typedef struct AvlNode *Position;
 typedef struct AvlNode *AvlTree;
 
-AvlTree NewNode(ElementType X, AvlTree Left, AvlTree Right, int Height);
-void DeleteNode(AvlTree T);
+static AvlTree NewNode(ElementType X, AvlTree Left, AvlTree Right, int Height);
+static void DeleteNode(AvlTree T);
 
-int Max(int ValueA, int ValueB);
+static int Max(int ValueA, int ValueB);
 
-Position SingleRotateWithLeft(Position K2);
-Position SingleRotateWithRight(Position K1);
-Position DoubleRotateWithLeft(Position K3);
-Position DoubleRotateWithRight(Position K1);
+static Position SingleRotateWithLeft(Position K2);
+static Position SingleRotateWithRight(Position K1);
+static Position DoubleRotateWithLeft(Position K3);
+static Position DoubleRotateWithRight(Position K1);
 
-int GetHeight(Position P);
-void UpdateHeight(Position P);
+static int GetHeight(Position P);
+static void UpdateHeight(Position P);
 AvlTree MakeEmpty(AvlTree T);
 Position Find(ElementType X, AvlTree T);
 Position FindMin(AvlTree T);

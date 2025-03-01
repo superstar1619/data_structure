@@ -41,12 +41,12 @@ void Free(void *ptr)
 
 #ifdef _List_H
 
-void DeleteNode(Position P)
+static void DeleteNode(Position P)
 {
     Free(P);
 }
 
-Position NewNode(ElementType X, Position PNext)
+static Position NewNode(ElementType X, Position PNext)
 {
     Position P = (Position)Malloc(sizeof(struct Node));
     P->Element = X;
@@ -181,12 +181,12 @@ static void CursorFree(Position P)
     CursorSpace[0].Next = P;
 }
 
-void DeleteNode(Position P)
+static void DeleteNode(Position P)
 {
     CursorFree(P);
 }
 
-Position NewNode(ElementType X, Position PNext)
+static Position NewNode(ElementType X, Position PNext)
 {
     Position P = CursorAlloc();
     CursorSpace[P].Element = X;
@@ -292,7 +292,7 @@ ElementType Retrieve(const Position P)
 
 #ifdef _Stack_h
 
-PtrToNode NewNode(ElementType X, PtrToNode PNext)
+static PtrToNode NewNode(ElementType X, PtrToNode PNext)
 {
     PtrToNode P = (PtrToNode)Malloc(sizeof(struct Node));
     P->Element = X;
@@ -300,7 +300,7 @@ PtrToNode NewNode(ElementType X, PtrToNode PNext)
     return P;
 }
 
-void DeleteNode(PtrToNode P)
+static void DeleteNode(PtrToNode P)
 {
     Free(P);
 }
@@ -559,14 +559,14 @@ void MakeEmpty(Deque D)
     D->Rear = -1;
 }
 
-int Succ(int Value, Deque D)
+static int Succ(int Value, Deque D)
 {
     if (++Value == D->Capacity)
         Value = 0;
     return Value;
 }
 
-int Prev(int Value, Deque D)
+static int Prev(int Value, Deque D)
 {
     if (--Value == -1)
         Value = D->Capacity - 1;
@@ -657,7 +657,7 @@ ElementType RearAndEject(Deque D)
 
 #ifdef _Tree_H
 
-SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right)
+static SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right)
 {
     SearchTree T = (SearchTree)Malloc(sizeof(struct TreeNode));
     T->Element = X;
@@ -666,7 +666,7 @@ SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right)
     return T;
 }
 
-void DeleteNode(SearchTree T)
+static void DeleteNode(SearchTree T)
 {
     Free(T);
 }
@@ -808,7 +808,7 @@ Position FindNext(ElementType X, SearchTree T)
 
 #ifdef _Tree_H_NR
 
-SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right)
+static SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right)
 {
     SearchTree T = (SearchTree)Malloc(sizeof(struct TreeNode));
     T->Element = X;
@@ -817,12 +817,12 @@ SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right)
     return T;
 }
 
-void DeleteNode(SearchTree T)
+static void DeleteNode(SearchTree T)
 {
     Free(T);
 }
 
-void ModifyLine(Position P, LinkLine L)
+static void ModifyLine(Position P, LinkLine L)
 {
     if (L != NULL)
         *L = P;
@@ -895,7 +895,7 @@ void Insert(ElementType X, LinkLine LT)
     }
 }
 
-void DeleteSpecialTree(SearchTree T, LinkLine L)
+static void DeleteSpecialTree(SearchTree T, LinkLine L)
 {
     if (T->Left != NULL)
         ModifyLine(T->Left, L);
@@ -995,7 +995,7 @@ Position FindNext(ElementType X, SearchTree T)
 
 #ifdef _AvlTree_H
 
-AvlTree NewNode(ElementType X, AvlTree Left, AvlTree Right, int Height)
+static AvlTree NewNode(ElementType X, AvlTree Left, AvlTree Right, int Height)
 {
     AvlTree T = (AvlTree)Malloc(sizeof(struct AvlNode));
     T->Element = X;
@@ -1005,12 +1005,12 @@ AvlTree NewNode(ElementType X, AvlTree Left, AvlTree Right, int Height)
     return T;
 }
 
-void DeleteNode(AvlTree T)
+static void DeleteNode(AvlTree T)
 {
     Free(T);
 }
 
-int Max(int ValueA, int ValueB)
+static int Max(int ValueA, int ValueB)
 {
     if (ValueA > ValueB)
         return ValueA;
@@ -1018,7 +1018,7 @@ int Max(int ValueA, int ValueB)
         return ValueB;
 }
 
-Position SingleRotateWithLeft(Position K2)
+static Position SingleRotateWithLeft(Position K2)
 {
     Position K1;
 
@@ -1031,7 +1031,7 @@ Position SingleRotateWithLeft(Position K2)
     return K1;
 }
 
-Position SingleRotateWithRight(Position K1)
+static Position SingleRotateWithRight(Position K1)
 {
     Position K2;
 
@@ -1044,21 +1044,21 @@ Position SingleRotateWithRight(Position K1)
     return K2;
 }
 
-Position DoubleRotateWithLeft(Position K3)
+static Position DoubleRotateWithLeft(Position K3)
 {
     K3->Left = SingleRotateWithRight(K3->Left);
 
     return SingleRotateWithLeft(K3);
 }
 
-Position DoubleRotateWithRight(Position K1)
+static Position DoubleRotateWithRight(Position K1)
 {
     K1->Right = SingleRotateWithLeft(K1->Right);
 
     return SingleRotateWithRight(K1);
 }
 
-int GetHeight(Position P)
+static int GetHeight(Position P)
 {
     if (P == NULL)
         return -1;
@@ -1066,7 +1066,7 @@ int GetHeight(Position P)
         return P->Height;
 }
 
-void UpdateHeight(Position P)
+static void UpdateHeight(Position P)
 {
     if (P != NULL)
         P->Height = Max(GetHeight(P->Left), GetHeight(P->Right)) + 1;

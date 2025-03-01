@@ -1074,6 +1074,25 @@ static void UpdateHeight(Position P)
         P->Height = Max(GetHeight(P->Left), GetHeight(P->Right)) + 1;
 }
 
+static AvlTree TryRotate(AvlTree T)
+{
+    if (GetHeight(T->Right) - GetHeight(T->Left) == 2)
+    {
+        if (GetHeight(T->Right->Right) >= GetHeight(T->Right->Left))
+            T = SingleRotateWithRight(T);
+        else
+            T = DoubleRotateWithRight(T);
+    }
+    else if (GetHeight(T->Left) - GetHeight(T->Right) == 2)
+    {
+        if (GetHeight(T->Left->Left) >= GetHeight(T->Left->Right))
+            T = SingleRotateWithLeft(T);
+        else
+            T = DoubleRotateWithLeft(T);
+    }
+    return T;
+}
+
 AvlTree MakeEmpty(AvlTree T)
 {
     if (T != NULL)
@@ -1126,20 +1145,12 @@ AvlTree Insert(ElementType X, AvlTree T)
     else if (X < T->Element)
     {
         T->Left = Insert(X, T->Left);
-        if (GetHeight(T->Left) - GetHeight(T->Right) == 2)
-            if (X < T->Left->Element)
-                T = SingleRotateWithLeft(T);
-            else
-                T = DoubleRotateWithLeft(T);
+        T = TryRotate(T);
     }
     else if (X > T->Element)
     {
         T->Right = Insert(X, T->Right);
-        if (GetHeight(T->Right) - GetHeight(T->Left) == 2)
-            if (X > T->Right->Element)
-                T = SingleRotateWithRight(T);
-            else
-                T = DoubleRotateWithRight(T);
+        T = TryRotate(T);
     }
     UpdateHeight(T);
     return T;
@@ -1148,38 +1159,24 @@ AvlTree Insert(ElementType X, AvlTree T)
 AvlTree Delete(ElementType X, AvlTree T)
 {
     Position TmpCell;
-    int Flag = 0;
     if (T == NULL)
         runtime_error("Element not found");
     else if (X < T->Element)
     {
         T->Left = Delete(X, T->Left);
-        if (GetHeight(T->Right) - GetHeight(T->Left) == 2)
-            if (GetHeight(T->Right->Right) >= GetHeight(T->Right->Left))
-                T = SingleRotateWithRight(T);
-            else
-                T = DoubleRotateWithRight(T);
+        T = TryRotate(T);
     }
     else if (X > T->Element)
     {
-        Flag = X > T->Right->Element;
         T->Right = Delete(X, T->Right);
-        if (GetHeight(T->Left) - GetHeight(T->Right) == 2)
-            if (GetHeight(T->Left->Left) >= GetHeight(T->Left->Right))
-                T = SingleRotateWithLeft(T);
-            else
-                T = DoubleRotateWithLeft(T);
+        T = TryRotate(T);
     }
     else if (T->Left && T->Right)
     {
         TmpCell = FindMin(T->Right);
         T->Element = TmpCell->Element;
         T->Right = Delete(T->Element, T->Right);
-        if (GetHeight(T->Left) - GetHeight(T->Right) == 2)
-            if (GetHeight(T->Left->Left) >= GetHeight(T->Left->Right))
-                T = SingleRotateWithLeft(T);
-            else
-                T = DoubleRotateWithLeft(T);
+        T = TryRotate(T);
     }
     else
     {
@@ -1244,4 +1241,5 @@ Position FindNext(ElementType X, AvlTree T)
     }
     return P;
 }
+
 #endif

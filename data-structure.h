@@ -288,6 +288,7 @@ static Position DoubleRotateWithRight(Position K1);
 
 static int GetHeight(Position P);
 static void UpdateHeight(Position P);
+static AvlTree TryRotate(AvlTree T);
 AvlTree MakeEmpty(AvlTree T);
 Position Find(ElementType X, AvlTree T);
 Position FindMin(AvlTree T);

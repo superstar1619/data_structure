@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <string.h>
 
 void unix_error(char *msg);
 void runtime_error(char *msg);
@@ -225,7 +227,6 @@ Position FindMin(SearchTree T);
 Position FindMax(SearchTree T);
 SearchTree Insert(ElementType X, SearchTree T);
 SearchTree Delete(ElementType X, SearchTree T);
-void DeleteSpecialTree(SearchTree T, LinkLine L);
 ElementType Retrieve(Position P);
 Position FindPrev(ElementType X, SearchTree T);
 Position FindNext(ElementType X, SearchTree T);
@@ -239,7 +240,7 @@ struct TreeNode
 
 #endif
 
-#ifndef _Tree_H_NR
+#ifdef _Tree_H_NR
 
 struct TreeNode;
 typedef struct TreeNode *Position;
@@ -254,6 +255,7 @@ Position Find(ElementType X, SearchTree T);
 Position FindMin(SearchTree T);
 Position FindMax(SearchTree T);
 void Insert(ElementType X, LinkLine LT);
+void DeleteSpecialTree(SearchTree T, LinkLine L);
 void Delete(ElementType X, LinkLine LT);
 ElementType Retrieve(Position P);
 Position FindPrev(ElementType X, SearchTree T);
@@ -264,6 +266,44 @@ struct TreeNode
     ElementType Element;
     SearchTree Left;
     SearchTree Right;
+};
+
+#endif
+
+#ifdef _AvlTree_H
+
+struct AvlNode;
+typedef struct AvlNode *Position;
+typedef struct AvlNode *AvlTree;
+
+AvlTree NewNode(ElementType X, AvlTree Left, AvlTree Right, int Height);
+void DeleteNode(AvlTree T);
+
+int Max(int ValueA, int ValueB);
+
+Position SingleRotateWithLeft(Position K2);
+Position SingleRotateWithRight(Position K1);
+Position DoubleRotateWithLeft(Position K3);
+Position DoubleRotateWithRight(Position K1);
+
+int GetHeight(Position P);
+void UpdateHeight(Position P);
+AvlTree MakeEmpty(AvlTree T);
+Position Find(ElementType X, AvlTree T);
+Position FindMin(AvlTree T);
+Position FindMax(AvlTree T);
+AvlTree Insert(ElementType X, AvlTree T);
+AvlTree Delete(ElementType X, AvlTree T);
+ElementType Retrieve(Position P);
+Position FindPrev(ElementType X, AvlTree T);
+Position FindNext(ElementType X, AvlTree T);
+
+struct AvlNode
+{
+    ElementType Element;
+    AvlTree Left;
+    AvlTree Right;
+    int Height;
 };
 
 #endif

@@ -806,7 +806,7 @@ Position FindNext(ElementType X, SearchTree T)
 
 #endif
 
-#ifndef _Tree_H_NR
+#ifdef _Tree_H_NR
 
 SearchTree NewNode(ElementType X, SearchTree Left, SearchTree Right)
 {
@@ -991,4 +991,255 @@ Position FindNext(ElementType X, SearchTree T)
     return P;
 }
 
+#endif
+
+#ifdef _AvlTree_H
+
+AvlTree NewNode(ElementType X, AvlTree Left, AvlTree Right, int Height)
+{
+    AvlTree T = (AvlTree)Malloc(sizeof(struct AvlNode));
+    T->Element = X;
+    T->Left = Left;
+    T->Right = Right;
+    T->Height = Height;
+    return T;
+}
+
+void DeleteNode(AvlTree T)
+{
+    Free(T);
+}
+
+int Max(int ValueA, int ValueB)
+{
+    if (ValueA > ValueB)
+        return ValueA;
+    else
+        return ValueB;
+}
+
+Position SingleRotateWithLeft(Position K2)
+{
+    Position K1;
+
+    K1 = K2->Left;
+    K2->Left = K1->Right;
+    K1->Right = K2;
+
+    UpdateHeight(K2);
+    UpdateHeight(K1);
+    return K1;
+}
+
+Position SingleRotateWithRight(Position K1)
+{
+    Position K2;
+
+    K2 = K1->Right;
+    K1->Right = K2->Left;
+    K2->Left = K1;
+
+    UpdateHeight(K1);
+    UpdateHeight(K2);
+    return K2;
+}
+
+Position DoubleRotateWithLeft(Position K3)
+{
+    K3->Left = SingleRotateWithRight(K3->Left);
+
+    return SingleRotateWithLeft(K3);
+}
+
+Position DoubleRotateWithRight(Position K1)
+{
+    K1->Right = SingleRotateWithLeft(K1->Right);
+
+    return SingleRotateWithRight(K1);
+}
+
+int GetHeight(Position P)
+{
+    if (P == NULL)
+        return -1;
+    else
+        return P->Height;
+}
+
+void UpdateHeight(Position P)
+{
+    if (P != NULL)
+        P->Height = Max(GetHeight(P->Left), GetHeight(P->Right)) + 1;
+}
+
+AvlTree MakeEmpty(AvlTree T)
+{
+    if (T != NULL)
+    {
+        MakeEmpty(T->Left);
+        MakeEmpty(T->Right);
+        DeleteNode(T);
+    }
+    return NULL;
+}
+
+Position Find(ElementType X, AvlTree T)
+{
+    if (T == NULL)
+        return NULL;
+    if (X < T->Element)
+        return Find(X, T->Left);
+    else if (X > T->Element)
+        return Find(X, T->Right);
+    else
+        return T;
+}
+
+Position FindMin(AvlTree T)
+{
+    if (T == NULL)
+        return NULL;
+    else if (T->Left == NULL)
+        return T;
+    else
+        return FindMin(T->Left);
+}
+
+Position FindMax(AvlTree T)
+{
+    if (T == NULL)
+        return NULL;
+    else if (T->Right == NULL)
+        return T;
+    else
+        return FindMax(T->Right);
+}
+
+AvlTree Insert(ElementType X, AvlTree T)
+{
+    if (T == NULL)
+    {
+        T = NewNode(X, NULL, NULL, 0);
+    }
+    else if (X < T->Element)
+    {
+        T->Left = Insert(X, T->Left);
+        if (GetHeight(T->Left) - GetHeight(T->Right) == 2)
+            if (X < T->Left->Element)
+                T = SingleRotateWithLeft(T);
+            else
+                T = DoubleRotateWithLeft(T);
+    }
+    else if (X > T->Element)
+    {
+        T->Right = Insert(X, T->Right);
+        if (GetHeight(T->Right) - GetHeight(T->Left) == 2)
+            if (X > T->Right->Element)
+                T = SingleRotateWithRight(T);
+            else
+                T = DoubleRotateWithRight(T);
+    }
+    UpdateHeight(T);
+    return T;
+}
+
+AvlTree Delete(ElementType X, AvlTree T)
+{
+    Position TmpCell;
+    int Flag = 0;
+    if (T == NULL)
+        runtime_error("Element not found");
+    else if (X < T->Element)
+    {
+        T->Left = Delete(X, T->Left);
+        if (GetHeight(T->Right) - GetHeight(T->Left) == 2)
+            if (GetHeight(T->Right->Right) >= GetHeight(T->Right->Left))
+                T = SingleRotateWithRight(T);
+            else
+                T = DoubleRotateWithRight(T);
+    }
+    else if (X > T->Element)
+    {
+        Flag = X > T->Right->Element;
+        T->Right = Delete(X, T->Right);
+        if (GetHeight(T->Left) - GetHeight(T->Right) == 2)
+            if (GetHeight(T->Left->Left) >= GetHeight(T->Left->Right))
+                T = SingleRotateWithLeft(T);
+            else
+                T = DoubleRotateWithLeft(T);
+    }
+    else if (T->Left && T->Right)
+    {
+        TmpCell = FindMin(T->Right);
+        T->Element = TmpCell->Element;
+        T->Right = Delete(T->Element, T->Right);
+        if (GetHeight(T->Left) - GetHeight(T->Right) == 2)
+            if (GetHeight(T->Left->Left) >= GetHeight(T->Left->Right))
+                T = SingleRotateWithLeft(T);
+            else
+                T = DoubleRotateWithLeft(T);
+    }
+    else
+    {
+        TmpCell = T;
+        if (T->Left == NULL)
+            T = T->Right;
+        else if (T->Right == NULL)
+            T = T->Left;
+        DeleteNode(TmpCell);
+    }
+    UpdateHeight(T);
+    return T;
+}
+
+ElementType Retrieve(Position P)
+{
+    return P->Element;
+}
+
+Position FindPrev(ElementType X, AvlTree T)
+{
+    if (T == NULL)
+        runtime_error("Empty Tree");
+    Position P = NULL, N;
+    if (T->Element == X)
+        N = T->Left;
+    else if (T->Element < X)
+        N = T->Right;
+    else
+        N = T->Left;
+    if (N != NULL)
+    {
+        P = FindPrev(X, N);
+    }
+    if (T->Element < X)
+    {
+        if (P == NULL || P->Element < T->Element)
+            P = T;
+    }
+    return P;
+}
+
+Position FindNext(ElementType X, AvlTree T)
+{
+    if (T == NULL)
+        runtime_error("Empty Tree");
+    Position P = NULL, N;
+    if (T->Element == X)
+        N = T->Right;
+    else if (T->Element < X)
+        N = T->Right;
+    else
+        N = T->Left;
+    if (N != NULL)
+    {
+        P = FindNext(X, N);
+    }
+    if (T->Element > X)
+    {
+        if (P == NULL || P->Element > T->Element)
+            P = T;
+    }
+    return P;
+}
 #endif

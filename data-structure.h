@@ -49,7 +49,7 @@ struct Node
 
 #ifdef _Cursor_H
 
-#define SpaceSize 1024
+#define SpaceSize 1000010
 
 typedef int PtrToNode;
 typedef PtrToNode List;
@@ -57,8 +57,8 @@ typedef PtrToNode Position;
 
 void InitializeCursorSpace(void);
 
-static Position CursorAlloc(void);
-static void CursorFree(Position P);
+Position CursorAlloc(void);
+void CursorFree(Position P);
 
 static void DeleteNode(Position P);
 static Position NewNode(ElementType X, Position PNext);

@@ -78,7 +78,7 @@ int IsEmpty(List L)
     return L->Next == NULL;
 }
 
-int IsLast(Position P)
+int IsLast(Position P, List L)
 {
     return P->Next == NULL;
 }
@@ -96,7 +96,7 @@ void Delete(ElementType X, List L)
 {
     Position P, TmpCell;
     P = FindPrevious(X, L);
-    if (!IsLast(P))
+    if (!IsLast(P, L))
     {
         TmpCell = P->Next;
         P->Next = TmpCell->Next;
@@ -150,6 +150,8 @@ Position Advance(Position P)
 
 ElementType Retrieve(Position P)
 {
+    if (P == NULL)
+        return 0;
     return P->Element;
 }
 
@@ -165,7 +167,7 @@ void InitializeCursorSpace(void)
     return;
 }
 
-static Position CursorAlloc(void)
+Position CursorAlloc(void)
 {
     Position P;
     P = CursorSpace[0].Next;
@@ -175,7 +177,7 @@ static Position CursorAlloc(void)
     return P;
 }
 
-static void CursorFree(Position P)
+void CursorFree(Position P)
 {
     CursorSpace[P].Next = CursorSpace[0].Next;
     CursorSpace[0].Next = P;
@@ -436,7 +438,7 @@ ElementType TopAndPop(Stack S)
 
 int IsEmpty(Queue Q)
 {
-    return Q->Capacity == 0;
+    return Q->Size == 0;
 }
 
 int IsFull(Queue Q)
@@ -639,7 +641,7 @@ ElementType FrontAndPop(Deque D)
 {
     if (IsEmpty(D))
         runtime_error("Empty deque");
-    ElementType X = Front(X);
+    ElementType X = Front(D);
     Pop(D);
     return X;
 }
@@ -648,7 +650,7 @@ ElementType RearAndEject(Deque D)
 {
     if (IsEmpty(D))
         runtime_error("Empty deque");
-    ElementType X = Rear(X);
+    ElementType X = Rear(D);
     Eject(D);
     return X;
 }

@@ -1243,3 +1243,127 @@ Position FindNext(ElementType X, AvlTree T)
 }
 
 #endif
+
+#ifdef _HashSep_H
+
+char *ConvertToString(ElementType KeyValue)
+{
+    char *s = (char *)Malloc(20);
+    sprintf(s, "%d", KeyValue);
+    return s;
+}
+
+Index Hash(ElementType KeyValue, int TableSize)
+{
+    char *P = ConvertToString(KeyValue);
+    const char *Key = P;
+    unsigned int HashVal = 0;
+    while (*Key != '\0')
+        HashVal = ((HashVal << 5) + *Key++) % TableSize;
+    Free(P);
+    return HashVal;
+}
+
+Position NewNode(ElementType X, Position PNext)
+{
+    Position P;
+    P = (Position)Malloc(sizeof(struct ListNode));
+    P->Element = X;
+    P->Next = PNext;
+    return P;
+}
+
+void DeleteNode(Position P)
+{
+    Free(P);
+}
+
+static int IsPrime(int Value)
+{
+    int i, sq = sqrt(Value);
+    for (i = 2; i <= sqrt(Value); i++)
+        if (Value % i == 0)
+            return 0;
+    return 1;
+}
+
+static int NextPrime(int Value)
+{
+    while (!IsPrime(Value))
+        Value++;
+    return Value;
+}
+
+HashTable InitializeTable(int TableSize)
+{
+    HashTable H;
+    int i;
+
+    if (TableSize < MinTableSize)
+    {
+        runtime_error("Table size too small");
+        return NULL;
+    }
+
+    H = (HashTable)Malloc(sizeof(struct HashTbl));
+
+    H->TableSize = NextPrime(TableSize);
+    H->TheLists = (List *)Malloc(sizeof(List) * H->TableSize);
+
+    int i;
+    for (i = 0; i < H->TableSize; i++)
+        H->TheLists[i] = NULL;
+    return H;
+}
+
+Position Find(ElementType Key, HashTable H)
+{
+    Position P;
+    P = H->TheLists[Hash(Key, H->TableSize)];
+    while (P != NULL && P->Element != Key)
+        P = P->Next;
+    return P;
+}
+
+void Insert(ElementType Key, HashTable H)
+{
+    Position Pos, NewCell;
+    List *L;
+
+    Pos = Find(Key, H);
+    if (Pos == NULL)
+    {
+        L = &(H->TheLists[Hash(Key, H->TableSize)]);
+        NewCell = NewNode(Key, *L);
+        *L = NewCell;
+    }
+}
+
+void DestroyList(List L)
+{
+    Position P;
+    while (L)
+    {
+        P = L;
+        L = L->Next;
+        DeleteNode(P);
+    }
+}
+
+void DestroyTable(HashTable H)
+{
+    int i;
+    for (i = 0; i < H->TableSize; i++)
+    {
+        DestroyList(H->TheLists[i]);
+    }
+    Free(H->TheLists);
+    Free(H);
+}
+
+ElementType Retrieve(Position P)
+{
+    return P->Element;
+}
+
+#endif

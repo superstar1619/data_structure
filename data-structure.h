@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <math.h>
 
 void unix_error(char *msg);
 void runtime_error(char *msg);
@@ -305,6 +306,48 @@ struct AvlNode
     AvlTree Left;
     AvlTree Right;
     int Height;
+};
+
+#endif
+
+#ifdef _HashSep_H
+
+#define MinTableSize (5)
+
+struct ListNode;
+typedef struct ListNode *Position;
+struct HashTbl;
+typedef struct HashTbl *HashTable;
+
+char *ConvertToString(ElementType KeyValue);
+
+typedef unsigned int Index;
+Index Hash(ElementType KeyValue, int TableSize);
+
+Position NewNode(ElementType X, Position PNext);
+void DeleteNode(Position P);
+
+static int IsPrime(int Value);
+static int NextPrime(int Value);
+HashTable InitializeTable(int TableSize);
+void DestroyList(List L);
+void DestroyTable(HashTable H);
+Position Find(ElementType Key, HashTable H);
+void Insert(ElementType Key, HashTable H);
+ElementType Retrieve(Position P);
+
+struct ListNode
+{
+    ElementType Element;
+    Position Next;
+};
+
+typedef Position List;
+
+struct HashTbl
+{
+    int TableSize;
+    List *TheLists;
 };
 
 #endif

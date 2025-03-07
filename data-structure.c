@@ -521,6 +521,110 @@ ElementType FrontAndDequeue(Queue Q)
 
 #endif
 
+#ifdef _Queue_H
+
+PtrToNode NewNode(ElementType X, PtrToNode PNext)
+{
+    PtrToNode P;
+    P = (PtrToNode)Malloc(sizeof(struct Node));
+    P->Element = X;
+    P->Next = PNext;
+    return P;
+}
+
+void DeleteNode(PtrToNode P)
+{
+    Free(P);
+}
+
+int IsEmpty(Queue Q)
+{
+    return Q->Size == 0; // or Q->Front==NULL && Q->Rear==NULL;
+}
+
+Queue CreateQueue()
+{
+    Queue Q;
+    Q = (Queue)Malloc(sizeof(struct QueueRecord));
+    Q->Front = NULL;
+    Q->Rear = NULL;
+    Q->Size = 0;
+    return Q;
+}
+
+void DisposeQueue(Queue Q)
+{
+    PtrToNode P;
+    P = Q->Front;
+    while (P != NULL)
+    {
+        PtrToNode PN = P->Next;
+        DeleteNode(P);
+        P = PN;
+    }
+    Free(Q);
+}
+
+void MakeEmpty(Queue Q)
+{
+    PtrToNode P;
+    P = Q->Front;
+    while (P != NULL)
+    {
+        PtrToNode PN = P->Next;
+        DeleteNode(P);
+        P = PN;
+    }
+    Q->Front = NULL;
+    Q->Rear = NULL;
+    Q->Size = 0;
+}
+
+void Enqueue(ElementType X, Queue Q)
+{
+    PtrToNode P = NewNode(X, NULL);
+    if (IsEmpty(Q))
+        Q->Front = Q->Rear = P;
+    else
+    {
+        Q->Rear->Next = P;
+        Q->Rear = P;
+    }
+    Q->Size++;
+}
+
+ElementType Front(Queue Q)
+{
+    if (IsEmpty(Q))
+        runtime_error("Empty queue");
+    return Q->Front->Element;
+}
+
+void Dequeue(Queue Q)
+{
+    if (IsEmpty(Q))
+        runtime_error("Empty queue");
+    else
+    {
+        PtrToNode P;
+        Q->Size--;
+        P = Q->Front;
+        Q->Front = Q->Front->Next;
+        DeleteNode(P);
+    }
+    if (IsEmpty(Q))
+        Q->Front = Q->Rear = NULL;
+}
+
+ElementType FrontAndDequeue(Queue Q)
+{
+    ElementType X = Front(Q);
+    Dequeue(Q);
+    return X;
+}
+
+#endif
+
 #ifdef _Deque_h
 
 int IsEmpty(Deque D)

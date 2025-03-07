@@ -167,6 +167,43 @@ struct QueueRecord
 
 #endif
 
+#ifdef _Queue_H
+
+struct Node;
+typedef struct Node *PtrToNode;
+
+struct QueueRecord;
+typedef struct QueueRecord *Queue;
+
+PtrToNode NewNode(ElementType X, PtrToNode PNext);
+void DeleteNode(PtrToNode P);
+
+int IsEmpty(Queue Q);
+Queue CreateQueue();
+void DisposeQueue(Queue Q);
+void MakeEmpty(Queue Q);
+void Enqueue(ElementType X, Queue Q);
+ElementType Front(Queue Q);
+void Dequeue(Queue Q);
+ElementType FrontAndDequeue(Queue Q);
+
+#define MinQueueSize (5)
+
+struct Node
+{
+    ElementType Element;
+    PtrToNode Next;
+};
+
+struct QueueRecord
+{
+    PtrToNode Front;
+    PtrToNode Rear;
+    int Size;
+};
+
+#endif
+
 #ifdef _Deque_h
 
 struct DequeRecord;

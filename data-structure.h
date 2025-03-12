@@ -388,3 +388,49 @@ struct HashTbl
 };
 
 #endif
+
+#ifndef _HashQuad_H
+
+#define MinTableSize (5)
+
+typedef unsigned int Index;
+typedef Index Position;
+
+struct HashTbl;
+typedef struct HashTbl *HashTable;
+
+char *ConvertToString(ElementType KeyValue);
+Index Hash(ElementType KeyValue, int TableSize);
+
+static int IsPrime(int Value);
+static int NextPrime(int Value);
+
+HashTable InitializeTable(int TableSize);
+void DestroyTable(HashTable H);
+Position Find(ElementType Key, HashTable H);
+void Insert(ElementType Key, HashTable H);
+ElementType Retrieve(Position P, HashTable H);
+HashTable Rehash(HashTable H);
+
+enum KindOfEntry
+{
+    Legitimate,
+    Empty,
+    Delete
+};
+
+struct HashEntry
+{
+    ElementType Element;
+    enum KindOfEntry Info;
+};
+
+typedef struct HashEntry Cell;
+
+struct HashTbl
+{
+    int TableSize;
+    Cell *TheCells;
+};
+
+#endif

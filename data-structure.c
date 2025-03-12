@@ -1471,3 +1471,123 @@ ElementType Retrieve(Position P)
 }
 
 #endif
+
+#ifndef _HashQuad_H
+
+char *ConvertToString(ElementType KeyValue)
+{
+    char *s = (char *)Malloc(20);
+    sprintf(s, "%d", KeyValue);
+    return s;
+}
+
+Index Hash(ElementType KeyValue, int TableSize)
+{
+    char *P = ConvertToString(KeyValue);
+    const char *Key = P;
+    unsigned int HashVal = 0;
+    while (*Key != '\0')
+        HashVal = ((HashVal << 5) + *Key++) % TableSize;
+    Free(P);
+    return HashVal;
+}
+
+static int IsPrime(int Value)
+{
+    int i, sq = sqrt(Value);
+    for (i = 2; i <= sqrt(Value); i++)
+        if (Value % i == 0)
+            return 0;
+    return 1;
+}
+
+static int NextPrime(int Value)
+{
+    while (!IsPrime(Value))
+        Value++;
+    return Value;
+}
+
+HashTable InitializeTable(int TableSize)
+{
+    HashTable H;
+    int i;
+
+    if (TableSize < MinTableSize)
+    {
+        runtime_error("Table size too small");
+        return NULL;
+    }
+
+    H = (HashTable)Malloc(sizeof(struct HashTbl));
+
+    H->TableSize = NextPrime(TableSize);
+
+    H->TheCells = (Cell *)Malloc(sizeof(Cell) * H->TableSize);
+
+    for (int i = 0; i < H->TableSize; i++)
+        H->TheCells[i].Info = Empty;
+
+    return H;
+}
+
+void DestroyTable(HashTable H)
+{
+    if (H == NULL)
+        runtime_error("Destroy Unknown");
+    Free(H->TheCells);
+    Free(H);
+}
+
+Position Find(ElementType Key, HashTable H)
+{
+    Position CurrentPos;
+    int CollisionNum;
+
+    CollisionNum = 0;
+    CurrentPos = Hash(Key, H->TableSize);
+    while (H->TheCells[CurrentPos].Info != Empty && H->TheCells[CurrentPos].Element != Key)
+    {
+        CurrentPos += 2 * ++CollisionNum - 1;
+        CurrentPos = CurrentPos % H->TableSize;
+    }
+    return CurrentPos;
+}
+
+void Insert(ElementType Key, HashTable H)
+{
+    Position Pos;
+    Pos = Find(Key, H);
+    if (H->TheCells[Pos].Info != Legitimate)
+    {
+        H->TheCells[Pos].Info = Legitimate;
+        H->TheCells[Pos].Element = Key;
+    }
+}
+
+ElementType Retrieve(Position P, HashTable H)
+{
+    return H->TheCells[P].Element;
+}
+
+HashTable Rehash(HashTable H)
+{
+    int i, OldSize;
+    Cell *OldCells;
+    HashTable OldH;
+
+    OldH = H;
+    OldCells = H->TheCells;
+    OldSize = H->TableSize;
+
+    H = InitializeTable(2 * OldSize);
+
+    for (int i = 0; i < OldSize; i++)
+        if (OldCells[i].Info == Legitimate)
+            Insert(OldCells[i].Element, H);
+
+    DestroyTable(OldH);
+    return H;
+}
+
+#endif

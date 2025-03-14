@@ -1659,6 +1659,13 @@ ElementType DeleteMin(PriorityQueue H)
     return MinElement;
 }
 
+ElementType FindMin(PriorityQueue H)
+{
+    if (IsEmpty(H))
+        runtime_error("Priority queue is empty");
+    return H->Elements[1];
+}
+
 int IsEmpty(PriorityQueue H)
 {
     return H->Size == 0;

@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <string.h>
 #include <math.h>
+#include <limits.h>
 
 void unix_error(char *msg);
 void runtime_error(char *msg);
@@ -389,7 +390,7 @@ struct HashTbl
 
 #endif
 
-#ifndef _HashQuad_H
+#ifdef _HashQuad_H
 
 #define MinTableSize (5)
 
@@ -431,6 +432,33 @@ struct HashTbl
 {
     int TableSize;
     Cell *TheCells;
+};
+
+#endif
+
+#ifndef _BinHeap_H
+
+#define MinData (INT_MIN)
+
+#define MinPQSize (5)
+
+struct HeapStruct;
+typedef struct HeapStruct *PriorityQueue;
+
+PriorityQueue Initialize(int MaxElements);
+void Destroy(PriorityQueue H);
+void MakeEmpty(PriorityQueue H);
+void Insert(ElementType X, PriorityQueue H);
+ElementType DeleteMin(PriorityQueue H);
+ElementType FindMin(PriorityQueue H);
+int IsEmpty(PriorityQueue H);
+int IsFull(PriorityQueue H);
+
+struct HeapStruct
+{
+    int Capacity;
+    int Size;
+    ElementType *Elements;
 };
 
 #endif

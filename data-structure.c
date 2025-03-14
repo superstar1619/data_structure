@@ -1472,7 +1472,7 @@ ElementType Retrieve(Position P)
 
 #endif
 
-#ifndef _HashQuad_H
+#ifdef _HashQuad_H
 
 char *ConvertToString(ElementType KeyValue)
 {
@@ -1588,6 +1588,85 @@ HashTable Rehash(HashTable H)
 
     DestroyTable(OldH);
     return H;
+}
+
+#endif
+
+#ifndef _BinHeap_H
+
+PriorityQueue Initialize(int MaxElements)
+{
+    PriorityQueue H;
+
+    if (MaxElements < MinPQSize)
+        runtime_error("Priority queue size is too small");
+
+    H = (PriorityQueue)Malloc(sizeof(struct HeapStruct));
+
+    H->Elements = (ElementType *)Malloc(sizeof(ElementType) * MaxElements);
+    H->Capacity = MaxElements;
+    H->Size = 0;
+    H->Elements[0] = MinData;
+
+    return H;
+}
+
+void Destroy(PriorityQueue H)
+{
+    Free(H->Elements);
+    Free(H);
+}
+
+void MakeEmpty(PriorityQueue H)
+{
+    H->Size = 0;
+}
+
+void Insert(ElementType X, PriorityQueue H)
+{
+    int i;
+
+    if (IsFull(H))
+        runtime_error("Priority queue is full");
+
+    for (i = ++H->Size; H->Elements[i / 2] > X; i /= 2)
+        H->Elements[i] = H->Elements[i / 2];
+    H->Elements[i] = X;
+}
+
+ElementType DeleteMin(PriorityQueue H)
+{
+    int i, Child;
+    ElementType MinElement, LastElement;
+
+    if (IsEmpty(H))
+        runtime_error("Priority queue is empty");
+
+    MinElement = H->Elements[1];
+    LastElement = H->Elements[H->Size--];
+
+    for (i = 1; i * 2 <= H->Size; i = Child)
+    {
+        if (Child != H->Size && H->Elements[Child + 1] < H->Elements[Child])
+            Child++;
+
+        if (LastElement > H->Elements[Child])
+            H->Elements[i] = H->Elements[Child];
+        else
+            break;
+    }
+    H->Elements[i] = LastElement;
+    return MinElement;
+}
+
+int IsEmpty(PriorityQueue H)
+{
+    return H->Size == 0;
+}
+
+int IsFull(PriorityQueue H)
+{
+    return H->Size == H->Capacity;
 }
 
 #endif

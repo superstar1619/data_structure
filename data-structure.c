@@ -1592,7 +1592,7 @@ HashTable Rehash(HashTable H)
 
 #endif
 
-#ifndef _BinHeap_H
+#ifdef _BinHeap_H
 
 PriorityQueue Initialize(int MaxElements)
 {
@@ -1674,6 +1674,97 @@ int IsEmpty(PriorityQueue H)
 int IsFull(PriorityQueue H)
 {
     return H->Size == H->Capacity;
+}
+
+#endif
+
+#ifndef _LeftHeadp_H
+
+static PriorityQueue NewNode(ElementType X, PriorityQueue Left, PriorityQueue Right, int Npl)
+{
+    PriorityQueue H;
+    H = (PriorityQueue)Malloc(sizeof(struct TreeNode));
+    H->Element = X;
+    H->Left = Left;
+    H->Right = Right;
+    H->Npl = Npl;
+    return H;
+}
+
+void DeleteNode(PriorityQueue H)
+{
+    Free(H);
+}
+
+static void SwapChild(PriorityQueue H)
+{
+    PriorityQueue TmpCell;
+    TmpCell = H->Left;
+    H->Left = H->Right;
+    H->Right = TmpCell;
+}
+
+PriorityQueue Initialize(void)
+{
+    return NULL;
+}
+
+ElementType FindMin(PriorityQueue H)
+{
+    return H->Element;
+}
+
+int IsEmpty(PriorityQueue H)
+{
+    return H == NULL;
+}
+
+PriorityQueue Merge(PriorityQueue H1, PriorityQueue H2)
+{
+    if (H1 == NULL)
+        return H2;
+    if (H2 == NULL)
+        return H1;
+    if (H1->Element < H2->Element)
+        return Merge1(H1, H2);
+    else
+        return Merge1(H2, H1);
+}
+
+static PriorityQueue Merge1(PriorityQueue H1, PriorityQueue H2)
+{
+    if (H1->Left == NULL)
+        H1->Left = H2;
+    else
+    {
+        H1->Right = Merge(H1->Right, H2);
+        if (H1->Left->Npl < H1->Right->Npl)
+            SwapChild(H1);
+        H1->Npl = H1->Right->Npl + 1;
+    }
+    return H1;
+}
+
+PriorityQueue Insert1(ElementType X, PriorityQueue H)
+{
+    PriorityQueue SingleNode;
+
+    SingleNode = NewNode(X, NULL, NULL, 0);
+    H = Merge(SingleNode, H);
+    return H;
+}
+
+PriorityQueue DeleteMin1(PriorityQueue H)
+{
+    PriorityQueue LeftHeap, RightHeap;
+
+    if (IsEmpty(H))
+        runtime_error("Priority queue is empty");
+
+    LeftHeap = H->Left;
+    RightHeap = H->Right;
+    DeleteNode(H);
+    return Merge(LeftHeap, RightHeap);
 }
 
 #endif

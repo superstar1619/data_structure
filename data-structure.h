@@ -436,7 +436,7 @@ struct HashTbl
 
 #endif
 
-#ifndef _BinHeap_H
+#ifdef _BinHeap_H
 
 #define MinData (INT_MIN)
 
@@ -459,6 +459,35 @@ struct HeapStruct
     int Capacity;
     int Size;
     ElementType *Elements;
+};
+
+#endif
+
+#ifndef _LeftHeadp_H
+
+struct TreeNode;
+typedef struct TreeNode *PriorityQueue;
+
+static PriorityQueue NewNode(ElementType X, PriorityQueue Left, PriorityQueue Right, int Npl);
+static void DeleteNode(PriorityQueue H);
+static void SwapChild(PriorityQueue H);
+PriorityQueue Initialize(void);
+ElementType FindMin(PriorityQueue H);
+int IsEmpty(PriorityQueue H);
+PriorityQueue Merge(PriorityQueue H1, PriorityQueue H2);
+static PriorityQueue Merge1(PriorityQueue H1, PriorityQueue H2);
+
+#define Insert(X, H) (H = Insert1((X), H))
+
+PriorityQueue Insert1(ElementType X, PriorityQueue H);
+PriorityQueue DeleteMin1(PriorityQueue);
+
+struct TreeNode
+{
+    ElementType Element;
+    PriorityQueue Left;
+    PriorityQueue Right;
+    int Npl;
 };
 
 #endif

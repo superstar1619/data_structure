@@ -156,6 +156,115 @@ ElementType Retrieve(Position P)
 }
 
 #endif
+
+#ifdef _DoubleList_H
+
+static void DeleteNode(Position P)
+{
+    Free(P);
+}
+
+static Position NewNode(ElementType X, Position PPrev, Position PNext)
+{
+    Position P;
+    P = (Position)Malloc(sizeof(struct Node));
+    P->Element = X;
+    P->Next = PNext;
+    P->Prev = PPrev;
+    return P;
+}
+
+List Init()
+{
+    List L;
+    L = (List)Malloc(sizeof(struct ListRecord));
+    L->Head = L->Tail = NewNode(0, NULL, NULL);
+    return L;
+}
+
+int IsEmpty(List L)
+{
+    return L->Head == L->Tail;
+}
+
+int IsLast(Position P, List L)
+{
+    return P == L->Tail;
+}
+
+Position Find(ElementType X, List L)
+{
+    Position P = L->Head->Next;
+    while (P != NULL && P->Element != X)
+        P = P->Next;
+    return P;
+}
+
+void Delete(ElementType X, List L)
+{
+    Position P = Find(X, L);
+    if (P == NULL)
+        runtime_error("Can not find the element in the list");
+    Position PP, PN;
+    PP = Prev(P);
+    PN = Next(P);
+    PP->Next = PN;
+    if (PN != NULL)
+        PN->Prev = PP;
+    DeleteNode(P);
+}
+
+Position FindPrevious(ElementType X, List L)
+{
+    return Prev(Find(X, L));
+}
+
+void Insert(ElementType X, List L, Position P)
+{
+    Position PP = Prev(P);
+    PP->Next = NewNode(X, PP, P);
+    P->Prev = PP->Next;
+}
+
+void DeleteList(List L)
+{
+    Position P = L->Head;
+    while (P != NULL)
+    {
+        Position PN = P->Next;
+        DeleteNode(P);
+        P = PN;
+    }
+    Free(L);
+}
+
+Position Header(List L)
+{
+    return L->Head;
+}
+
+Position First(List L)
+{
+    return L->Head->Next;
+}
+
+Position Prev(Position P)
+{
+    return P->Prev;
+}
+
+Position Next(Position P)
+{
+    return P->Next;
+}
+
+ElementType Retrieve(Position P)
+{
+    return P->Element;
+}
+
+#endif
+
 #ifdef _Cursor_H
 
 void InitializeCursorSpace(void)
@@ -386,7 +495,7 @@ Stack CreateStack(int MaxElements)
     return S;
 }
 
-void DisposetStack(Stack S)
+void DisposeStack(Stack S)
 {
     if (S != NULL)
     {
@@ -1678,7 +1787,7 @@ int IsFull(PriorityQueue H)
 
 #endif
 
-#ifndef _LeftHeadp_H
+#ifdef _LeftHeadp_H
 
 static PriorityQueue NewNode(ElementType X, PriorityQueue Left, PriorityQueue Right, int Npl)
 {

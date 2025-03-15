@@ -49,6 +49,47 @@ struct Node
 
 #endif
 
+#ifdef _DoubleList_H
+
+struct Node;
+typedef struct Node *PtrToNode;
+struct ListRecord;
+typedef struct ListRecord *List;
+typedef PtrToNode Position;
+
+static void DeleteNode(Position P);
+static Position NewNode(ElementType X, Position PPrev, Position PNext);
+
+List Init();
+List MakeEmpty(List L);
+int IsEmpty(List L);
+int IsLast(Position P, List L);
+Position Find(ElementType X, List L);
+void Delete(ElementType X, List L);
+Position FindPrevious(ElementType X, List L);
+void Insert(ElementType X, List L, Position P);
+void DeleteList(List L);
+Position Header(List L);
+Position First(List L);
+Position Prev(Position P);
+Position Next(Position P);
+ElementType Retrieve(Position P);
+
+struct Node
+{
+    ElementType Element;
+    Position Prev;
+    Position Next;
+};
+
+struct ListRecord
+{
+    Position Head;
+    Position Tail;
+};
+
+#endif
+
 #ifdef _Cursor_H
 
 #define SpaceSize 1000010
@@ -463,7 +504,7 @@ struct HeapStruct
 
 #endif
 
-#ifndef _LeftHeadp_H
+#ifdef _LeftHeadp_H
 
 struct TreeNode;
 typedef struct TreeNode *PriorityQueue;

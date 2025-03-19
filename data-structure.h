@@ -532,3 +532,45 @@ struct TreeNode
 };
 
 #endif
+
+#ifndef _Binomial_H
+
+#define Infinity (30000L)
+
+#define MaxTrees (14)
+#define Capacity (16383)
+
+struct BinNode;
+typedef struct BinNode *BinTree;
+typedef struct BinNode *Position;
+struct Collection;
+typedef struct Collection *BinQueue;
+
+BinQueue Initialize(void);
+BinTree NewNode(ElementType X, Position LeftChild, Position NextSibling);
+void DeleteNode(BinTree T);
+void DestroyBinTree(BinTree T);
+void Destroy(BinQueue H);
+void MakeEmpty(BinQueue H);
+BinTree CombineTrees(BinTree T1, BinTree T2);
+BinQueue Insert(ElementType Item, BinQueue H);
+ElementType DeleteMin(BinQueue H);
+BinQueue Merge(BinQueue H1, BinQueue H2);
+ElementType FindMin(BinQueue H);
+int IsEmpty(BinQueue H);
+int IsFull(BinQueue H);
+
+struct BinNode
+{
+    ElementType Element;
+    Position LeftChild;
+    Position NextSibling;
+};
+
+struct Collection
+{
+    int CurrentSize;
+    BinTree TheTrees[MaxTrees];
+};
+
+#endif

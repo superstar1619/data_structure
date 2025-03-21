@@ -533,7 +533,7 @@ struct TreeNode
 
 #endif
 
-#ifndef _Binomial_H
+#ifdef _Binomial_H
 
 #define Infinity (30000L)
 
@@ -572,5 +572,33 @@ struct Collection
     int CurrentSize;
     BinTree TheTrees[MaxTrees];
 };
+
+#endif
+
+#ifndef _Sort_h
+
+void Swap(ElementType *a, ElementType *b);
+
+void Insertionsort(ElementType A[], int N);
+
+void Shellsort(ElementType A[], int N);
+
+#define LeftChild(i) (2 * (i) + 1)
+void PrecDown(ElementType A[], int i, int N);
+void Heapsort(ElementType A[], int N);
+
+void MSort(ElementType A[], ElementType TmpArray[], int Left, int Right);
+void Mergesort(ElementType A[], int N);
+void Merge(ElementType A[], ElementType TmpArray[], int Lpos, int Rpos, int RightEnd);
+
+#define Cutoff (3)
+void Quicksort(ElementType A[], int N);
+ElementType Median3(ElementType A[], int Left, int Right);
+void Qsort(ElementType A[], int Left, int Right);
+void Qselect(ElementType A[], int k, int Left, int Right);
+
+#define MaxNum (16383)
+void Bucketsort(ElementType A[], int N);
+void Bsort(ElementType A[], int TmpArray[], int N);
 
 #endif

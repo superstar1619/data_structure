@@ -2066,7 +2066,7 @@ int IsFull(BinQueue H)
 
 #endif
 
-#ifndef _Sort_h
+#ifdef _Sort_h
 
 void Swap(ElementType *a, ElementType *b)
 {
@@ -2297,6 +2297,65 @@ void Bsort(ElementType A[], int TmpArray[], int N)
         for (j = 0; j < TmpArray[i]; j++)
             A[P++] = i;
     }
+}
+
+#endif
+
+#ifndef _DisjSet_H
+
+void Initialize(DisjSet S)
+{
+    int i;
+
+    for (i = NumSets; i > 0; i--)
+        S[i] = -1;
+}
+
+// void SetUnion(DisjSet S, SetType Root1, SetType Root2)
+// {
+//     S[Root2] = Root1;
+// }
+
+// SetType Find(ElementType X, DisjSet S)
+// {
+//     if (S[X] <= 0)
+//         return X;
+//     else
+//         return Find(S[X], S);
+// }
+
+// void SetUnion(DisjSet S, SetType Root1, SetType Root2)
+// {
+//     if (S[Root2] < S[Root1])
+//         S[Root1] = Root2;
+//     else
+//     {
+//         if (S[Root1] == S[Root2])
+//             S[Root1]--;
+//         S[Root2] = Root1;
+//     }
+// }
+
+void SetUnion(DisjSet S, SetType Root1, SetType Root2)
+{
+    if (S[Root2] < S[Root1])
+    {
+        S[Root2] += S[Root1];
+        S[Root1] = Root2;
+    }
+    else
+    {
+        S[Root1] += S[Root2];
+        S[Root2] = Root1;
+    }
+}
+
+SetType Find(ElementType X, DisjSet S)
+{
+    if (S[X] <= 0)
+        return X;
+    else
+        return S[X] = Find(S[X], S);
 }
 
 #endif

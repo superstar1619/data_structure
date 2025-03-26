@@ -575,7 +575,7 @@ struct Collection
 
 #endif
 
-#ifndef _Sort_h
+#ifdef _Sort_h
 
 void Swap(ElementType *a, ElementType *b);
 
@@ -600,5 +600,17 @@ void Qselect(ElementType A[], int k, int Left, int Right);
 #define MaxNum (16383)
 void Bucketsort(ElementType A[], int N);
 void Bsort(ElementType A[], int TmpArray[], int N);
+
+#endif
+
+#ifndef _DisjSet_H
+
+#define NumSets 1010
+typedef int DisjSet[NumSets + 1];
+typedef int SetType;
+
+void Initialize(DisjSet S);
+void SetUnion(DisjSet S, SetType Root1, SetType Root2);
+SetType Find(ElementType X, DisjSet S);
 
 #endif

@@ -2360,7 +2360,7 @@ SetType Find(ElementType X, DisjSet S)
 
 #endif
 
-#ifndef _Random_H
+#ifdef _Random_H
 
 // double Random(void)
 // {
@@ -2388,6 +2388,178 @@ double Random(void)
 void Initialize(unsigned long InitVal)
 {
     Seed = InitVal;
+}
+
+#endif
+
+#ifndef _Three_Tuple_List_H
+
+static void DeleteNode(Position P)
+{
+    Free(P);
+}
+
+static Position NewNode(ElementType X, int Row, int Col, Position PNext)
+{
+    Position P = (Position)Malloc(sizeof(struct Node));
+    P->Element = X;
+    P->Row = Row;
+    P->Col = Col;
+    P->PNext = PNext;
+    return P;
+}
+
+void DeleteList(List L)
+{
+    MakeEmpty(L);
+    Free(L);
+}
+
+List Init(int Rt, int Ct)
+{
+    List L = (List)Malloc(sizeof(struct ListRecord));
+    L->Head = L->Tail = NULL;
+    MakeEmpty(L);
+    L->Rt = Rt;
+    L->Ct = Ct;
+    return L;
+}
+
+void MakeEmpty(List L)
+{
+    Position P = L->Head;
+    while (P)
+    {
+        Position PN = P->PNext;
+        DeleteNode(P);
+        P = PN;
+    }
+    L->Head = L->Tail = NULL;
+}
+
+int IsEmpty(List L)
+{
+    return L->Head == NULL;
+}
+
+int IsLast(Position P, List L)
+{
+    return P == L->Tail;
+}
+
+void InsertLast(ElementType X, int Row, int Col, List L)
+{
+    Position P = NewNode(X, Row, Col, NULL);
+    if (IsEmpty(L))
+    {
+        L->Head = L->Tail = P;
+    }
+    else
+    {
+        L->Tail->PNext = P;
+        L->Tail = P;
+    }
+}
+
+ElementType Retrieve(Position P)
+{
+    return P->Element;
+}
+
+List Reverse(List L)
+{
+    List LN = Init(L->Ct, L->Rt);
+    for (int i = 1; i <= L->Ct; i++)
+    {
+        Position P = L->Head;
+        while (P)
+        {
+            if (P->Col == i)
+                InsertLast(P->Element, P->Col, P->Row, LN);
+            P = P->PNext;
+        }
+    }
+    return LN;
+}
+
+List Add(List La, List Lb)
+{
+    List L = Init(La->Rt, La->Ct);
+    Position Pa = La->Head, Pb = Lb->Head;
+    while (Pa && Pb)
+    {
+        if (Pa->Col == Pb->Col && Pa->Row == Pb->Row)
+        {
+            if (Pa->Element + Pb->Element != 0)
+                InsertLast(Pa->Element + Pb->Element, Pa->Row, Pa->Col, L);
+            Pa = Pa->PNext;
+            Pb = Pb->PNext;
+        }
+        else if (Pa->Row < Pb->Row || Pa->Row == Pb->Row && Pa->Col < Pb->Col)
+        {
+            InsertLast(Pa->Element, Pa->Row, Pa->Col, L);
+            Pa = Pa->PNext;
+        }
+        else
+        {
+            InsertLast(Pb->Element, Pb->Row, Pb->Col, L);
+            Pb = Pb->PNext;
+        }
+    }
+    while (Pa)
+    {
+        InsertLast(Pa->Element, Pa->Row, Pa->Col, L);
+        Pa = Pa->PNext;
+    }
+    while (Pb)
+    {
+        InsertLast(Pb->Element, Pb->Row, Pb->Col, L);
+        Pb = Pb->PNext;
+    }
+    return L;
+}
+
+Position FindNext(Position P)
+{
+    if (!P)
+        return P;
+    while (P->PNext && P->PNext->Row == P->Row)
+        P = P->PNext;
+    P = P->PNext;
+    return P;
+}
+
+List Mul(List La, List Lb)
+{
+    List L = Init(La->Rt, Lb->Ct);
+    Lb = Reverse(Lb);
+
+    for (Position Pas = La->Head, Pae = FindNext(Pas); Pas != Pae; Pas = Pae, Pae = FindNext(Pas))
+    {
+        for (Position Pbs = Lb->Head, Pbe = FindNext(Pbs); Pbs != Pbe; Pbs = Pbe, Pbe = FindNext(Pbs))
+        {
+            ElementType Result = 0;
+            Position P1 = Pas;
+            Position P2 = Pbs;
+            while (P1 != Pae && P2 != Pbe)
+            {
+                if (P1->Col == P2->Col)
+                {
+                    Result += P1->Element * P2->Element;
+                    P1 = P1->PNext;
+                    P2 = P2->PNext;
+                }
+                else if (P1->Col < P2->Col)
+                    P1 = P1->PNext;
+                else
+                    P2 = P2->PNext;
+            }
+            if (Result != 0)
+                InsertLast(Result, Pas->Row, Pbs->Row, L);
+        }
+    }
+    DeleteList(Lb);
+    return L;
 }
 
 #endif

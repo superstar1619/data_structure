@@ -615,7 +615,7 @@ SetType Find(ElementType X, DisjSet S);
 
 #endif
 
-#ifndef _Random_H
+#ifdef _Random_H
 
 static unsigned long Seed = 1;
 
@@ -627,4 +627,81 @@ static unsigned long Seed = 1;
 double Random(void);
 void Initialize(unsigned long InitVal);
 
+#endif
+
+#ifndef _Three_Tuple_List_H
+
+struct Node;
+typedef struct Node *PtrToNode;
+struct ListRecord;
+typedef struct ListRecord *List;
+typedef PtrToNode Position;
+
+static void DeleteNode(Position P);
+static Position NewNode(ElementType X, int Row, int Col, Position PNext);
+void DeleteList(List L);
+List Init(int Rt, int Ct);
+void MakeEmpty(List L);
+int IsEmpty(List L);
+int IsLast(Position P, List L);
+void InsertLast(ElementType X, int Row, int Col, List L);
+ElementType Retrieve(Position P);
+
+List Reverse(List L);
+List Add(List La, List Lb);
+Position FindNext(Position P);
+List Mul(List La, List Lb);
+
+struct Node
+{
+    int Row, Col;
+    ElementType Element;
+    PtrToNode PNext;
+};
+
+struct ListRecord
+{
+    Position Head, Tail;
+    int Rt, Ct;
+};
+
+/*
+struct Node;
+typedef struct Node *PtrToNode;
+struct ListRecord;
+typedef struct ListRecord *List;
+typedef PtrToNode Position;
+
+static void DeleteNode(Position P);
+static Position NewNode(ElementType X, Position PPrev, Position PNext);
+
+List Init();
+List MakeEmpty(List L);
+int IsEmpty(List L);
+int IsLast(Position P, List L);
+Position Find(ElementType X, List L);
+void Delete(ElementType X, List L);
+Position FindPrevious(ElementType X, List L);
+void Insert(ElementType X, List L, Position P);
+void DeleteList(List L);
+Position Header(List L);
+Position First(List L);
+Position Prev(Position P);
+Position Next(Position P);
+ElementType Retrieve(Position P);
+
+struct Node
+{
+    ElementType Element;
+    Position Prev;
+    Position Next;
+};
+
+struct ListRecord
+{
+    Position Head;
+    Position Tail;
+};
+
+*/
 #endif

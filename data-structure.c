@@ -2301,7 +2301,7 @@ void Bsort(ElementType A[], int TmpArray[], int N)
 
 #endif
 
-#ifndef _DisjSet_H
+#ifdef _DisjSet_H
 
 void Initialize(DisjSet S)
 {
@@ -2356,6 +2356,38 @@ SetType Find(ElementType X, DisjSet S)
         return X;
     else
         return S[X] = Find(S[X], S);
+}
+
+#endif
+
+#ifndef _Random_H
+
+// double Random(void)
+// {
+//     Seed = (A * Seed) % M;
+//     return (double)Seed / M;
+// }
+
+// void Initialize(unsigned long InitVal)
+// {
+//     Seed = InitVal;
+// }
+
+double Random(void)
+{
+    long TmpSeed;
+
+    TmpSeed = A * (Seed % Q) - R * (Seed / Q);
+    if (TmpSeed >= 0)
+        Seed = TmpSeed;
+    else
+        Seed = TmpSeed;
+    return (double)Seed / M;
+}
+
+void Initialize(unsigned long InitVal)
+{
+    Seed = InitVal;
 }
 
 #endif

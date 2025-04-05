@@ -603,7 +603,7 @@ void Bsort(ElementType A[], int TmpArray[], int N);
 
 #endif
 
-#ifndef _DisjSet_H
+#ifdef _DisjSet_H
 
 #define NumSets 1010
 typedef int DisjSet[NumSets + 1];
@@ -612,5 +612,19 @@ typedef int SetType;
 void Initialize(DisjSet S);
 void SetUnion(DisjSet S, SetType Root1, SetType Root2);
 SetType Find(ElementType X, DisjSet S);
+
+#endif
+
+#ifndef _Random_H
+
+static unsigned long Seed = 1;
+
+#define A 48271L
+#define M 2147483647L
+#define Q (M / A)
+#define R (M % A)
+
+double Random(void);
+void Initialize(unsigned long InitVal);
 
 #endif

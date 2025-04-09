@@ -2657,7 +2657,7 @@ int IsEmpty(List L)
 void InsertLast(ElementType X, int Row, int Col, List L)
 {
     Position P;
-    Position Down = &(L->Col[Col]), Up = Down->Down, Right = &(L->Row[Row]), Left = Right->Left;
+    Position Down = &(L->Col[Col]), Up = Down->Up, Right = &(L->Row[Row]), Left = Right->Left;
     P = NewNode(X, Up, Down, Left, Right, Row, Col);
     Up->Down = P;
     Down->Up = P;
@@ -2731,7 +2731,7 @@ List Add(List La, List Lb)
 {
     if (La->Ct != Lb->Ct || La->Rt != La->Rt)
         runtime_error("Invalid Martix Add");
-    List L = Init(La->Row, La->Col);
+    List L = Init(La->Rt, La->Ct);
     for (int i = 1; i <= La->Rt; i++)
     {
         Position Pas = &(La->Row[i]), Pbs = &(Lb->Row[i]);

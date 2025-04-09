@@ -504,7 +504,7 @@ struct HeapStruct
 
 #endif
 
-#ifdef _LeftHeadp_H
+#ifdef _LeftHeap_H
 
 struct TreeNode;
 typedef struct TreeNode *PriorityQueue;
@@ -706,7 +706,7 @@ struct ListRecord
 */
 #endif
 
-#ifndef _Orthogonal_List_H
+#ifdef _Orthogonal_List_H
 
 struct Node;
 typedef struct Node *PtrToNode;

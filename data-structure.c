@@ -1787,7 +1787,7 @@ int IsFull(PriorityQueue H)
 
 #endif
 
-#ifdef _LeftHeadp_H
+#ifdef _LeftHeap_H
 
 static PriorityQueue NewNode(ElementType X, PriorityQueue Left, PriorityQueue Right, int Npl)
 {
@@ -2568,7 +2568,7 @@ List Mul(List La, List Lb)
 
 #endif
 
-#ifndef _Orthogonal_List_H
+#ifdef _Orthogonal_List_H
 
 static void DeleteNode(Position P)
 {

@@ -629,7 +629,7 @@ void Initialize(unsigned long InitVal);
 
 #endif
 
-#ifndef _Three_Tuple_List_H
+#ifdef _Three_Tuple_List_H
 
 struct Node;
 typedef struct Node *PtrToNode;
@@ -704,4 +704,42 @@ struct ListRecord
 };
 
 */
+#endif
+
+#ifndef _Orthogonal_List_H
+
+struct Node;
+typedef struct Node *PtrToNode;
+struct ListRecord;
+typedef struct ListRecord *List;
+typedef PtrToNode Position;
+
+static void DeleteNode(Position P);
+static Position NewNode(ElementType X, Position Up, Position Down, Position Left, Position Right, int Row, int Col);
+void DeleteList(List L);
+List Init(int Rt, int Ct);
+void MakeEmpty(List L);
+int IsEmpty(List L);
+void InsertLast(ElementType X, int Row, int Col, List L);
+ElementType Retrieve(Position P);
+
+void Swap(Position *a, Position *b);
+List Reverse(List L);
+List Add(List La, List Lb);
+List Mul(List La, List Lb);
+
+struct Node
+{
+    ElementType Element;
+    PtrToNode Up, Down, Left, Right;
+    int Row, Col;
+};
+
+struct ListRecord
+{
+    PtrToNode Row, Col;
+    int Rt, Ct;
+    int Size;
+};
+
 #endif

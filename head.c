@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <math.h>
+#include <limits.h>
 
 void unix_error(char *msg);
 void runtime_error(char *msg);

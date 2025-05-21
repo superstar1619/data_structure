@@ -1756,6 +1756,7 @@ ElementType DeleteMin(PriorityQueue H)
 
     for (i = 1; i * 2 <= H->Size; i = Child)
     {
+        Child = i * 2;
         if (Child != H->Size && H->Elements[Child + 1] < H->Elements[Child])
             Child++;
 

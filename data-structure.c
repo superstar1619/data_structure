@@ -2808,3 +2808,39 @@ List Mul(List La, List Lb)
 }
 
 #endif
+
+#ifndef _Splay_H
+
+static Position NullNode = NULL;
+
+Position NewNode(ElementType X, SplayTree Left, SplayTree Right)
+{
+    Position P;
+    P = (Position)Malloc(sizeof(struct SplayNode));
+    P->Element = X;
+    P->Left = Left;
+    P->Right = Right;
+    return P;
+}
+
+void DeleteNode(Position P)
+{
+    Free(P);
+}
+
+SplayTree Initialize(void)
+{
+    if (NullNode == NULL)
+    {
+        NullNode = (SplayTree)Malloc(sizeof(struct SplayNode));
+        NullNode->Left = NullNode->Right = NullNode;
+    }
+    return NullNode;
+}
+
+SplayTree Splay(ElementType Item, Position X)
+{
+    static struct SplayNode Header;
+}
+
+#endif

@@ -2886,20 +2886,20 @@ SplayTree Splay(ElementType Item, Position X)
     {
         if (Item < X->Element)
         {
-            if (Item < X->Left->Element)
-                X = SingleRotateWithLeft(X);
             if (X->Left == NullNode)
                 break;
+            if (Item < X->Left->Element)
+                X = SingleRotateWithLeft(X);
             RightTreeMin->Left = X;
             RightTreeMin = X;
             X = X->Left;
         }
         else
         {
-            if (Item > X->Right->Element)
-                X = SingleRotateWithRight(X);
             if (X->Right == NullNode)
                 break;
+            if (Item > X->Right->Element)
+                X = SingleRotateWithRight(X);
             LeftTreeMax->Right = X;
             LeftTreeMax = X;
             X = X->Right;

@@ -2839,9 +2839,167 @@ SplayTree Initialize(void)
     return NullNode;
 }
 
+SplayTree MakeEmpty(SplayTree T)
+{
+    if (T->Left)
+        MakeEmpty(T->Left);
+    if (T->Right)
+        MakeEmpty(T->Right);
+    DeleteNode(T);
+    return NULL;
+}
+
+static Position
+SingleRotateWithLeft(Position K2)
+{
+    Position K1;
+
+    K1 = K2->Left;
+    K2->Left = K1->Right;
+    K1->Right = K2;
+
+    return K1;
+}
+
+static Position
+SingleRotateWithRight(Position K1)
+{
+    Position K2;
+
+    K2 = K1->Right;
+    K1->Right = K2->Left;
+    K2->Left = K1;
+
+    return K2;
+}
+
 SplayTree Splay(ElementType Item, Position X)
 {
     static struct SplayNode Header;
+    Position LeftTreeMax, RightTreeMin;
+
+    Header.Left = Header.Right = NullNode;
+    LeftTreeMax = RightTreeMin = &Header;
+    NullNode->Element = Item;
+
+    while (Item != X->Element)
+    {
+        if (Item < X->Element)
+        {
+            if (Item < X->Left->Element)
+                X = SingleRotateWithLeft(X);
+            if (X->Left == NullNode)
+                break;
+            RightTreeMin->Left = X;
+            RightTreeMin = X;
+            X = X->Left;
+        }
+        else
+        {
+            if (Item > X->Right->Element)
+                X = SingleRotateWithRight(X);
+            if (X->Right == NullNode)
+                break;
+            LeftTreeMax->Right = X;
+            LeftTreeMax = X;
+            X = X->Right;
+        }
+    }
+    LeftTreeMax->Right = X->Left;
+    RightTreeMin->Left = X->Right;
+    X->Left = Header.Right; // Because L need right and R need left
+    X->Right = Header.Left;
+
+    return X;
+}
+
+SplayTree Find(ElementType X, SplayTree T)
+{
+    if (T != NullNode)
+        T = Splay(X, T);
+    return T;
+}
+
+SplayTree FindMin(SplayTree T)
+{
+    if (T != NullNode)
+        T = Splay(NegInfinity, T);
+    return T;
+}
+
+SplayTree FindMax(SplayTree T)
+{
+    if (T != NullNode)
+        T = Splay(Infinity, T);
+    return T;
+}
+
+SplayTree Insert(ElementType Item, SplayTree T)
+{
+    static Position NewTreeNode = NULL;
+
+    if (NewTreeNode == NULL)
+    {
+        NewTreeNode = NewNode(0, NullNode, NullNode);
+    }
+    NewTreeNode->Element = Item;
+
+    if (T == NullNode)
+    {
+        NewTreeNode->Left = NewTreeNode->Right = NullNode;
+        T = NewTreeNode;
+    }
+    else
+    {
+        T = Splay(Item, T);
+        if (Item < T->Element)
+        {
+            NewTreeNode->Left = T->Left;
+            NewTreeNode->Right = T;
+            T->Left = NullNode;
+            T = NewTreeNode;
+        }
+        else if (T->Element < Item)
+        {
+            NewTreeNode->Right = T->Right;
+            NewTreeNode->Left = T;
+            T->Right = NullNode;
+            T = NewTreeNode;
+        }
+        else
+            return T;
+    }
+    NewTreeNode = NULL;
+    return T;
+}
+
+SplayTree Remove(ElementType Item, SplayTree T)
+{
+    Position NewTree;
+
+    if (T != NullNode)
+    {
+        T = Splay(Item, T);
+        if (Item == T->Element)
+        {
+            if (T->Left == NullNode)
+                NewTree = T->Right;
+            else
+            {
+                NewTree = T->Left;
+                NewTree = Splay(Item, NewTree);
+                NewTree->Right = T->Right;
+            }
+            DeleteNode(T);
+            T = NewTree;
+        }
+    }
+    return T;
+}
+
+ElementType Retrieve(SplayTree T)
+{
+    return T->Element;
 }
 
 #endif

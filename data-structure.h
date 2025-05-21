@@ -749,6 +749,8 @@ struct ListRecord
 struct SplayNode;
 typedef struct SplayNode *SplayTree;
 typedef struct SplayNode *Position;
+#define Infinity 30000
+#define NegInfinity (-30000)
 
 Position NewNode(ElementType X, SplayTree Left, SplayTree Right);
 void DeleteNode(Position P);
